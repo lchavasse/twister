@@ -66,14 +66,16 @@ export const TwisterSpinner = () => {
 
   return (
     <div className="spinner-container">
+      <h1 className="game-title">Twister Spinner</h1>
       {showConfetti && result && (
         <Confetti
           width={window.innerWidth}
           height={window.innerHeight}
-          numberOfPieces={200}
+          numberOfPieces={300}
           recycle={false}
           colors={[result.color.toLowerCase()]}
-          gravity={0.3}
+          gravity={0.2}
+          style={{ position: 'fixed', top: 0, left: 0, zIndex: 3 }}
         />
       )}
       <div className="spinner-wrapper">
@@ -86,7 +88,8 @@ export const TwisterSpinner = () => {
                   ${COLORS.map((color, i) => 
                     `${color} ${i * (360/COLORS.length)}deg ${(i + 1) * (360/COLORS.length)}deg`
                   ).join(', ')}
-                )`
+                )`,
+                animation: 'rotate 1s linear infinite'
               }}
             >
               <div className="inner-circle" />
@@ -103,15 +106,18 @@ export const TwisterSpinner = () => {
               <div 
                 className="color-ring"
                 style={{ 
-                  backgroundColor: result.color.toLowerCase()
+                  backgroundColor: result.color.toLowerCase(),
+                  boxShadow: `0 0 100px ${result.color.toLowerCase()}50`
                 }}
               >
-                <div className="inner-circle" />
               </div>
               <div className="body-part-display-wrapper">
                 <div 
                   className="body-part-display"
-                  style={{ color: result.color.toLowerCase() }}
+                  style={{ 
+                    color: 'white',
+                    textShadow: `0 0 20px ${result.color.toLowerCase()}`
+                  }}
                 >
                   {result.bodyPart}
                 </div>
