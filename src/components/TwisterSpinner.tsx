@@ -5,8 +5,10 @@ import '../styles/TwisterSpinner.css';
 type SpinResult = {
   bodyPart: string;
   color: string;
+  name: string;
 };
 
+const names = ['Yorik Schellekens', 'Swapnil Raj', 'Lachlan Chavasse', 'Baddy Badcoe', 'Simmonds', 'Theo', 'Katie Fulton', 'Thomas Williamson'];
 const BODY_PARTS = ['Left Hand', 'Right Hand', 'Left Foot', 'Right Foot'];
 const COLORS = ['Red', 'Blue', 'Yellow', 'Green', 'Orange'];
 const synth = window.speechSynthesis;
@@ -16,6 +18,7 @@ export const TwisterSpinner = () => {
   const [result, setResult] = useState<SpinResult | null>(null);
   const [currentBodyPartIndex, setCurrentBodyPartIndex] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [showNames, setShowNames] = useState(true);
 
   useEffect(() => {
     const handleKeyPress = (_event: KeyboardEvent) => {
@@ -48,7 +51,7 @@ export const TwisterSpinner = () => {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.rate = 1;
     utterance.pitch = 1;
-    utterance.volume = 1;
+    utterance.volume = 2;
     synth.speak(utterance);
   }, []);
 
@@ -62,19 +65,24 @@ export const TwisterSpinner = () => {
     // Generate new random result
     const finalBodyPartIndex = Math.floor(Math.random() * BODY_PARTS.length);
     const finalColorIndex = Math.floor(Math.random() * COLORS.length);
+    const finalNameIndex = Math.floor(Math.random() * names.length);
     
     setTimeout(() => {
       const newResult = {
         bodyPart: BODY_PARTS[finalBodyPartIndex],
         color: COLORS[finalColorIndex],
+        name: names[finalNameIndex],
       };
       setResult(newResult);
       setCurrentBodyPartIndex(finalBodyPartIndex);
       setIsSpinning(false);
       
-      speak(`${newResult.bodyPart} on ${newResult.color}`);
+      speak(
+        showNames 
+          ? `${newResult.name} place ${newResult.bodyPart} on ${newResult.color}`
+          : `${newResult.bodyPart} on ${newResult.color}`
+      );
       
-      // Slight delay before showing confetti
       requestAnimationFrame(() => {
         setShowConfetti(true);
       });
@@ -148,6 +156,7 @@ export const TwisterSpinner = () => {
                     textShadow: `0 0 20px ${result.color.toLowerCase()}`
                   }}
                 >
+                  {showNames && <div className="player-name">{result.name}</div>}
                   {result.bodyPart}
                 </div>
               </div>
@@ -162,6 +171,17 @@ export const TwisterSpinner = () => {
         >
           {isSpinning ? 'Spinning...' : 'SPIN!'}
         </button>
+      </div>
+      <div className="name-toggle">
+        <label className="toggle-switch">
+          <input
+            type="checkbox"
+            checked={showNames}
+            onChange={(e) => setShowNames(e.target.checked)}
+          />
+          <span className="toggle-slider"></span>
+        </label>
+        <span className="toggle-label">Show Names</span>
       </div>
     </div>
   );
