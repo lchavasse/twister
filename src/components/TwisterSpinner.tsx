@@ -45,8 +45,8 @@ export const TwisterSpinner = () => {
     setIsSpinning(true);
     setShowConfetti(false);
     
-    // Random duration between 2-4 seconds
-    const spinDuration = 2000 + Math.random() * 2000;
+    // Random duration between 2-3 seconds
+    const spinDuration = 2000 + Math.random() * 1000;
     
     // Generate new random result
     const finalBodyPartIndex = Math.floor(Math.random() * BODY_PARTS.length);
@@ -60,7 +60,11 @@ export const TwisterSpinner = () => {
       setResult(newResult);
       setCurrentBodyPartIndex(finalBodyPartIndex);
       setIsSpinning(false);
-      setShowConfetti(true);
+      
+      // Slight delay before showing confetti
+      requestAnimationFrame(() => {
+        setShowConfetti(true);
+      });
     }, spinDuration);
   };
 
@@ -71,11 +75,23 @@ export const TwisterSpinner = () => {
         <Confetti
           width={window.innerWidth}
           height={window.innerHeight}
-          numberOfPieces={300}
+          numberOfPieces={100}
           recycle={false}
           colors={[result.color.toLowerCase()]}
-          gravity={0.2}
-          style={{ position: 'fixed', top: 0, left: 0, zIndex: 3 }}
+          gravity={0.25}
+          style={{ 
+            position: 'fixed', 
+            top: 0, 
+            left: 0, 
+            zIndex: 3,
+            willChange: 'transform',
+            transform: 'translateZ(0)'
+          }}
+          tweenDuration={1500}
+          friction={0.95}
+          onConfettiComplete={() => {
+            setShowConfetti(false);
+          }}
         />
       )}
       <div className="spinner-wrapper">
