@@ -8,7 +8,7 @@ type SpinResult = {
   name: string;
 };
 
-const names = ['Yorik Schellekens', 'Swapnil Raj', 'Lachlan Chavasse', 'Baddy Badcoe', 'Simmonds', 'Theo', 'Katie Fulton', 'Thomas Williamson'];
+import names from '../../names.json';
 const BODY_PARTS = ['Left Hand', 'Right Hand', 'Left Foot', 'Right Foot'];
 const COLORS = ['Red', 'Blue', 'Yellow', 'Green', 'Orange'];
 const synth = window.speechSynthesis;
