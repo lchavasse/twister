@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Confetti from 'react-confetti';
 import '../styles/TwisterSpinner.css';
 
@@ -9,6 +9,7 @@ type SpinResult = {
 
 const BODY_PARTS = ['Left Hand', 'Right Hand', 'Left Foot', 'Right Foot'];
 const COLORS = ['Red', 'Blue', 'Yellow', 'Green', 'Orange'];
+const synth = window.speechSynthesis;
 
 export const TwisterSpinner = () => {
   const [isSpinning, setIsSpinning] = useState(false);
@@ -41,6 +42,16 @@ export const TwisterSpinner = () => {
     };
   }, [isSpinning]);
 
+  const speak = useCallback((text: string) => {
+    synth.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 1;
+    utterance.pitch = 1;
+    utterance.volume = 1;
+    synth.speak(utterance);
+  }, []);
+
   const spin = () => {
     setIsSpinning(true);
     setShowConfetti(false);
@@ -60,6 +71,8 @@ export const TwisterSpinner = () => {
       setResult(newResult);
       setCurrentBodyPartIndex(finalBodyPartIndex);
       setIsSpinning(false);
+      
+      speak(`${newResult.bodyPart} on ${newResult.color}`);
       
       // Slight delay before showing confetti
       requestAnimationFrame(() => {
