@@ -17,7 +17,7 @@ export const TwisterSpinner = () => {
   const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
-    const handleKeyPress = (event: KeyboardEvent) => {
+    const handleKeyPress = (_event: KeyboardEvent) => {
       if (!isSpinning) {
         spin();
       }
